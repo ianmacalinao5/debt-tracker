@@ -16,16 +16,11 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useDebtCard } from '@/composables/useDebtCard'
+import type { Debtor } from "@/types";
 
-const props = defineProps<{
-    id: number;
-    name: string;
-    current_balance: string;
-    created_at: string;
-    last_updated: string;
-}>();
-
+const props = defineProps<Debtor>();
 const { handleAction } = useDebtCard(props.id);
+
 </script>
 
 <template>
