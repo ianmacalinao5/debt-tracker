@@ -2,6 +2,7 @@
 import DebtCard from '@/components/DebtCard.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import {
     Plus,
     Search,
@@ -38,6 +39,7 @@ const debtors = ref([
 ]);
 
 const searchQuery = ref('');
+const loading = ref(true);
 
 const totalOutstanding = computed(() => {
     return debtors.value.reduce((sum, debtor) => {
@@ -146,7 +148,10 @@ const handleLogout = () => {
 
         <!-- Debtors Grid -->
         <div v-if="filteredDebtors.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <DebtCard v-for="item in filteredDebtors" :key="item.id" v-bind="item" />
+            <Skeleton v-if="loading" class="w-full h-[150px]" v-for="item in filteredDebtors" :key="item.id" />
+            <div v-else>
+                <DebtCard v-for="item in filteredDebtors" :key="item.id" v-bind="item" />
+            </div>
         </div>
 
         <!-- Empty State -->

@@ -84,7 +84,7 @@ const { handleAction } = useDebtCard(props.id);
                 </span>
             </div>
 
-            <div class="text-right flex-shrink-0">
+            <div class="text-right shrink-0">
                 <p class="text-[10px] text-gray-400 mb-0.5">Last Activity</p>
                 <p class="text-xs font-semibold text-emerald-600">
                     {{ props.last_updated }}
