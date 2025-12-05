@@ -1,19 +1,32 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import Button from './ui/button/Button.vue';
-import { Plus, LogOut } from 'lucide-vue-next';
+import { Plus, LogOut, Smile } from 'lucide-vue-next';
 
 const props = defineProps<{
     handleAddDebtor: () => void
     handleLogout: () => void
 }>()
+
+const username = ref("Ian");
+
 </script>
 
 <template>
     <div class="flex items-center justify-between mb-6">
         <div class="flex flex-col">
-            <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">Dashboard</h1>
-            <p class="text-sm text-gray-600">Overview of outstanding debts owed to you</p>
+            <div class="flex items-center gap-2">
+                <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">
+                    Welcome back, {{ username }}
+                </h1>
+                <Smile class="text-yellow-500 w-8 h-8" />
+            </div>
+
+            <p class="text-sm text-gray-600">
+                Here’s your overview of outstanding debts and recent activity.
+            </p>
         </div>
+
 
         <div class="flex items-center gap-2">
             <Button @click="props.handleAddDebtor" class="hidden sm:flex">

@@ -7,10 +7,12 @@ export function useLoginValidation() {
 
   const usernameMessage = ref("");
   const passwordMessage = ref("");
+  const validateMessage = ref("");
 
   function validate() {
     usernameMessage.value = "";
     passwordMessage.value = "";
+    validateMessage.value = "";
     let isValid = true;
 
     if (!username.value) {
@@ -29,6 +31,15 @@ export function useLoginValidation() {
       isValid = false;
     }
 
+    if (!usernameMessage.value && !passwordMessage.value) {
+      if (username.value === "test" && password.value === "password") {
+        isValid = true;
+      } else {
+        validateMessage.value = "Invalid username or password.";
+        isValid = false;
+      }
+    }
+
     return isValid;
   }
 
@@ -38,6 +49,7 @@ export function useLoginValidation() {
     remember,
     usernameMessage,
     passwordMessage,
+    validateMessage,
     validate,
   };
 }

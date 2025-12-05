@@ -7,7 +7,7 @@ import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import { CircleDollarSign } from 'lucide-vue-next';
 import { useLoginValidation } from '@/composables/useLoginValidation';
 
-const { username, password, remember, usernameMessage, passwordMessage, validate } = useLoginValidation();
+const { username, password, remember, usernameMessage, passwordMessage, validateMessage, validate } = useLoginValidation();
 
 const router = useRouter();
 
@@ -35,7 +35,14 @@ const handleLogin = () => {
                 'border-red-500': usernameMessage,
                 'focus-visible:ring-red-200': usernameMessage
             }" />
-            <p v-if="usernameMessage" class="text-[12px] ml-2 text-red-500">{{ usernameMessage }}</p>
+            <transition enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
+                enter-active-class="transition-all duration-150" leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 -translate-y-1" leave-active-class="transition-all duration-150">
+                <p v-if="usernameMessage" class="text-[12px] ml-2 text-red-500">
+                    {{ usernameMessage }}
+                </p>
+            </transition>
+
         </div>
 
         <div class="flex flex-col gap-2">
@@ -43,14 +50,24 @@ const handleLogin = () => {
                 'border-red-500': passwordMessage,
                 'focus-visible:ring-red-200': passwordMessage
             }" />
-            <p v-if="passwordMessage" class="text-[12px] ml-2 text-red-500">{{ passwordMessage }}</p>
+            <transition enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
+                enter-active-class="transition-all duration-150" leave-from-class="opacity-100 translate-y-0"
+                leave-to-class="opacity-0 -translate-y-1" leave-active-class="transition-all duration-150">
+                <p v-if="passwordMessage" class="text-[12px] ml-2 text-red-500 transition-opacity duration-150">{{
+                    passwordMessage }}
+                </p>
+            </transition>
         </div>
 
         <div class="flex text-sm items-center gap-2">
             <Checkbox v-model="remember" id="remember" />
             <label for="remember">Remember Me</label>
         </div>
+
         <Button @click="handleLogin">Login</Button>
+
+        <p v-if="validateMessage" class="text-center text-sm text-red-500 bg-red-50 py-2 px-5 rounded">{{
+            validateMessage }}</p>
 
     </div>
 

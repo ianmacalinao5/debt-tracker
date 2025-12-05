@@ -62,7 +62,7 @@ const {
         <MetricCard :totalOutstanding="totalOutstanding" :totalDebtors="totalDebtors" />
 
         <!-- Search and Filter Bar -->
-        <SearchFilter v-model:searchQuery="searchQuery" />
+        <SearchFilter v-model:searchQuery="searchQuery" class="mt-10" />
 
         <!-- Show Cards -->
         <div v-if="filteredDebtors.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
