@@ -8,19 +8,26 @@ import {
     SquarePen,
     Trash2,
 } from "lucide-vue-next";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useDebtCard } from '@/composables/useDebtCard'
-import type { Debtor } from "@/types";
+} from "@/components/ui/dropdown-menu";
+
+import type { Debtor, ActionType } from "@/types";
 
 const props = defineProps<Debtor>();
-const { handleAction } = useDebtCard(props.id);
 
+const emit = defineEmits<{
+    (e: "action", payload: { action: ActionType; debtor: Debtor }): void;
+}>();
+
+const doAction = (action: ActionType) => {
+    emit("action", { action, debtor: props });
+};
 </script>
 
 <template>
@@ -40,29 +47,29 @@ const { handleAction } = useDebtCard(props.id);
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end" class="w-52">
-                    <DropdownMenuItem @click="handleAction('less')" class="text-green-700 cursor-pointer">
+                    <DropdownMenuItem @click="doAction('less')" class="text-green-700 cursor-pointer">
                         <MinusCircle class="w-4 h-4 mr-2" />
                         Less (Debtor Paid)
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem @click="handleAction('add')" class="text-red-700 cursor-pointer">
+                    <DropdownMenuItem @click="doAction('add')" class="text-red-700 cursor-pointer">
                         <PlusCircle class="w-4 h-4 mr-2" />
                         Add (Owes Again)
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuItem @click="handleAction('view')" class="cursor-pointer">
+                    <DropdownMenuItem @click="doAction('view')" class="cursor-pointer">
                         <FileText class="w-4 h-4 mr-2" />
                         View Transactions
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem @click="handleAction('edit')" class="cursor-pointer">
+                    <DropdownMenuItem @click="doAction('edit')" class="cursor-pointer">
                         <SquarePen class="w-4 h-4 mr-2" />
                         Edit Debtor
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem @click="handleAction('delete')" class="text-red-600 cursor-pointer">
+                    <DropdownMenuItem @click="doAction('delete')" class="text-red-600 cursor-pointer">
                         <Trash2 class="w-4 h-4 mr-2" />
                         Delete Debtor
                     </DropdownMenuItem>
@@ -72,19 +79,13 @@ const { handleAction } = useDebtCard(props.id);
 
         <!-- Body -->
         <div class="bg-white p-4 flex justify-between items-end gap-4">
-            <div class="flex flex-col">
-                <span class="text-xs text-gray-500 mb-1">Total Outstanding</span>
-                <span class="text-2xl sm:text-3xl font-bold text-gray-900">
-                    {{ props.current_balance }}
-                </span>
-            </div>
-
+            <div class="flex flex-col"> <span class="text-xs text-gray-500 mb-1">Total Outstanding</span> <span
+                    class="text-2xl font-bold text-gray-900"> ₱{{ props.current_balance }} </span> </div>
             <div class="text-right shrink-0">
                 <p class="text-[10px] text-gray-400 mb-0.5">Last Activity</p>
-                <p class="text-xs font-semibold text-emerald-600">
-                    {{ props.last_updated }}
-                </p>
+                <p class="text-xs font-semibold text-emerald-600"> {{ props.last_updated }} </p>
             </div>
         </div>
     </div>
+
 </template>

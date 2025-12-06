@@ -3,11 +3,12 @@ import type { Debtor } from "@/types";
 
 export function useDashboard(debtors: Ref<Debtor[]>) {
   const searchQuery = ref("");
+  const filter = ref("all");
 
   const totalOutstanding = computed(() => {
     return debtors.value
       .reduce((sum, debtor) => {
-        return sum + parseFloat(debtor.current_balance.replace(",", ""));
+        return sum + parseFloat(debtor.current_balance.replace(/,/g, ""));
       }, 0)
       .toLocaleString();
   });
@@ -15,10 +16,15 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
   const totalDebtors = computed(() => debtors.value.length);
 
   const filteredDebtors = computed(() => {
-    if (!searchQuery.value) return debtors.value;
-    return debtors.value.filter((debtor) =>
-      debtor.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
+    return debtors.value.filter((debtor) => {
+      const matchesSearch =
+        !searchQuery.value ||
+        debtor.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+
+      const matchesFilter =
+        filter.value === "all" || debtor.status === filter.value;
+      return matchesSearch && matchesFilter;
+    });
   });
 
   const handleAddDebtor = () => {
@@ -34,6 +40,7 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
     totalDebtors,
     filteredDebtors,
     searchQuery,
+    filter,
     handleAddDebtor,
     handleLogout,
   };
