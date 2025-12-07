@@ -41,7 +41,7 @@ const doAction = (action: ActionType) => {
 
             <DropdownMenu>
                 <DropdownMenuTrigger as-child>
-                    <button class="p-1 rounded-full hover:bg-emerald-100 transition-colors">
+                    <button class="p-1 rounded-full hover:bg-emerald-100 transition-colors cursor-pointer">
                         <MoreHorizontal class="w-5 h-5 text-emerald-700" />
                     </button>
                 </DropdownMenuTrigger>

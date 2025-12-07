@@ -59,7 +59,7 @@ const filters = [
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem v-for="f in filters" :key="f.value" @click="emit('update:filter', f.value)"
-                    class="flex items-center justify-between mt-1" :class="{
+                    class="flex items-center justify-between mt-1 cursor-pointer" :class="{
                         'bg-accent text-accent-foreground': props.filter === f.value
                     }">
                     {{ f.label }}

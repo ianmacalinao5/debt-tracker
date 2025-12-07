@@ -23,10 +23,30 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
 
       const matchesFilter =
         filter.value === "all" || debtor.status === filter.value;
+
       return matchesSearch && matchesFilter;
     });
   });
 
+  const hasDebtors = computed(() => debtors.value.length > 0);
+  const isSearching = computed(() => searchQuery.value.length > 0);
+  const hasFilters = computed(() => filter.value !== "all");
+
+  const emptyState = computed(() => {
+    if (!hasDebtors.value) return "empty";
+
+    if (isSearching.value && filteredDebtors.value.length === 0) {
+      return "search";
+    }
+
+    if (hasFilters.value && filteredDebtors.value.length === 0) {
+      return "filter";
+    }
+
+    return "empty";
+  });
+
+  // Handlers
   const handleAddDebtor = () => {
     console.log("Add new debtor");
   };
@@ -36,11 +56,17 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
   };
 
   return {
+    searchQuery,
+    filter,
     totalOutstanding,
     totalDebtors,
     filteredDebtors,
-    searchQuery,
-    filter,
+
+    emptyState,
+    hasDebtors,
+    isSearching,
+    hasFilters,
+
     handleAddDebtor,
     handleLogout,
   };

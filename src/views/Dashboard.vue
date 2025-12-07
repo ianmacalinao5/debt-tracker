@@ -41,6 +41,7 @@ const {
     totalOutstanding,
     totalDebtors,
     filteredDebtors,
+    emptyState,
     searchQuery,
     filter,
     handleLogout
@@ -53,7 +54,7 @@ const {
         <!-- Header Section -->
         <Header :handleAddDebtor="openAddDebtorModal" :handleLogout="handleLogout" />
 
-        <Button @click="openAddDebtorModal" class="w-full sm:hidden mb-6">
+        <Button @click="openAddDebtorModal" class="w-full sm:hidden mb-6 cursor-pointer">
             <Plus class="w-4 h-4 mr-2" />
             Add New Debtor
         </Button>
@@ -79,7 +80,7 @@ const {
 
         <!-- Show if now data to render -->
         <div v-else>
-            <NoDebtorsFound />
+            <NoDebtorsFound :state="emptyState" />
         </div>
     </div>
 
