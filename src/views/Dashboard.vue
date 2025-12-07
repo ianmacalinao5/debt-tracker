@@ -20,7 +20,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogFooter,
 } from '@/components/ui/dialog';
 
 const debtors = ref(debtorList);
@@ -86,7 +85,7 @@ const {
 
     <!-- MODAL -->
     <Dialog v-model:open="isDialogOpen">
-        <DialogContent class="max-w-md">
+        <DialogContent class="max-w-md max-h-[80vh] overflow-y-auto">
             <DialogHeader>
                 <DialogTitle>
                     {{ modalTitle }}
@@ -98,10 +97,6 @@ const {
 
             <!-- Dynamic modal body -->
             <component :is="modalComponent" :debtorId="selectedDebtorId" @close="closeModal" />
-
-            <DialogFooter>
-                <Button variant="outline" @click="closeModal">Close</Button>
-            </DialogFooter>
         </DialogContent>
     </Dialog>
 
