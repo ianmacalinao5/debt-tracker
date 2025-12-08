@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
@@ -7,13 +6,13 @@ import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import { CircleDollarSign } from 'lucide-vue-next';
 import { useLoginValidation } from '@/composables/useLoginValidation';
 
-const { username, password, remember, usernameMessage, passwordMessage, validateMessage, validate } = useLoginValidation();
+const { email, password, remember, emailMessage, passwordMessage, validateMessage, validate } = useLoginValidation();
 
 const router = useRouter();
 
 const handleLogin = () => {
     if (validate()) {
-        console.log('Login successful with:', username.value);
+        console.log('Login successful with:', email.value);
         router.push('/dashboard');
     } else {
         console.log('Validation failed. Errors displayed.');
@@ -31,15 +30,15 @@ const handleLogin = () => {
         <h2 class="text-lg font-medium">Login</h2>
 
         <div class="flex flex-col gap-2">
-            <Input type="text" placeholder="Username" v-model="username" :class="{
-                'border-red-500': usernameMessage,
-                'focus-visible:ring-red-200': usernameMessage
+            <Input type="email" placeholder="Email" v-model="email" :class="{
+                'border-red-500': emailMessage,
+                'focus-visible:ring-red-200': emailMessage
             }" />
             <transition enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
                 enter-active-class="transition-all duration-150" leave-from-class="opacity-100 translate-y-0"
                 leave-to-class="opacity-0 -translate-y-1" leave-active-class="transition-all duration-150">
-                <p v-if="usernameMessage" class="text-[12px] ml-2 text-red-500">
-                    {{ usernameMessage }}
+                <p v-if="emailMessage" class="text-[12px] ml-2 text-red-500">
+                    {{ emailMessage }}
                 </p>
             </transition>
 

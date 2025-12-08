@@ -1,26 +1,30 @@
 import { ref } from "vue";
 
 export function useLoginValidation() {
-  const username = ref("");
+  const email = ref("");
   const password = ref("");
   const remember = ref(false);
 
-  const usernameMessage = ref("");
+  const emailMessage = ref("");
   const passwordMessage = ref("");
   const validateMessage = ref("");
 
   function validate() {
-    usernameMessage.value = "";
+    emailMessage.value = "";
     passwordMessage.value = "";
     validateMessage.value = "";
     let isValid = true;
-
-    if (!username.value) {
-      usernameMessage.value = "Username is required.";
+    if (!email.value) {
+      emailMessage.value = "Email is required.";
       isValid = false;
-    } else if (username.value.length < 3) {
-      usernameMessage.value = "Username should be at least 3 characters long.";
+    } else if (email.value.length < 3) {
+      emailMessage.value = "Email should be at least 3 characters long.";
       isValid = false;
+    } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
+      emailMessage.value = "Please enter a valid email address.";
+      isValid = false;
+    } else {
+      emailMessage.value = "";
     }
 
     if (!password.value) {
@@ -31,11 +35,11 @@ export function useLoginValidation() {
       isValid = false;
     }
 
-    if (!usernameMessage.value && !passwordMessage.value) {
-      if (username.value === "test" && password.value === "password") {
+    if (!emailMessage.value && !passwordMessage.value) {
+      if (email.value === "test@gmail.com" && password.value === "password") {
         isValid = true;
       } else {
-        validateMessage.value = "Invalid username or password.";
+        validateMessage.value = "Invalid email or password.";
         isValid = false;
       }
     }
@@ -44,10 +48,10 @@ export function useLoginValidation() {
   }
 
   return {
-    username,
+    email,
     password,
     remember,
-    usernameMessage,
+    emailMessage,
     passwordMessage,
     validateMessage,
     validate,
