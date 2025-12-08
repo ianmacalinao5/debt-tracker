@@ -6,12 +6,11 @@ export function useAddDebtorValidation() {
 
   const nameMessage = ref("");
   const debtAmountMessage = ref("");
-  const validateMessage = ref("");
 
   function validate() {
     nameMessage.value = "";
     debtAmountMessage.value = "";
-    validateMessage.value = "";
+
     let isValid = true;
 
     const trimmedName = name.value.trim();
@@ -27,15 +26,19 @@ export function useAddDebtorValidation() {
       isValid = false;
     }
 
-    if (!debtAmount.value && debtAmount.value !== 0) {
+    if (debtAmount.value === null || debtAmount.value === undefined) {
       debtAmountMessage.value = "Amount is required.";
       isValid = false;
-    } else if (isNaN(Number(debtAmount.value))) {
-      debtAmountMessage.value = "Amount must be a valid number.";
-      isValid = false;
-    } else if (Number(debtAmount.value) < 1) {
-      debtAmountMessage.value = "Amount must be at least ₱1.";
-      isValid = false;
+    } else {
+      const n = Number(debtAmount.value);
+
+      if (isNaN(n)) {
+        debtAmountMessage.value = "Amount must be a valid number.";
+        isValid = false;
+      } else if (n < 1) {
+        debtAmountMessage.value = "Amount must be at least ₱1.";
+        isValid = false;
+      }
     }
 
     return isValid;
@@ -46,7 +49,6 @@ export function useAddDebtorValidation() {
     debtAmount,
     nameMessage,
     debtAmountMessage,
-    validateMessage,
     validate,
   };
 }

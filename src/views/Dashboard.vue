@@ -73,7 +73,8 @@ const {
             </template>
 
             <template v-else>
-                <DebtCard v-for="item in filteredDebtors" :key="item.id" v-bind="item" @action="openModal" />
+                <DebtCard v-for="item in filteredDebtors" :key="item.id" v-bind="item" @action="openModal"
+                    @close="isDialogOpen = false" />
             </template>
         </div>
 

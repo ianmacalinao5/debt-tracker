@@ -2,21 +2,31 @@
 import Button from '../ui/button/Button.vue';
 import Input from '../ui/input/Input.vue';
 import { useAddDebtorValidation } from '@/composables/useAddDebtorValidation';
+import { toast } from 'vue-sonner';
 
-const { name, debtAmount, nameMessage, debtAmountMessage, validateMessage, validate } = useAddDebtorValidation();
+const {
+    name,
+    debtAmount,
+    nameMessage,
+    debtAmountMessage,
+    validate
+} = useAddDebtorValidation();
+
 const emit = defineEmits(["close"]);
 
 const handleAddNewDebtor = () => {
     if (validate()) {
-        console.log("Added New Debtor Successfully.")
+        toast.success("Debtor added successfully!");
         emit("close");
     }
-}
+};
 </script>
 
 <template>
     <div>
         <form @submit.prevent="handleAddNewDebtor" class="flex flex-col gap-5">
+
+            <!-- Name -->
             <div class="flex flex-col gap-2">
                 <Input type="text" v-model="name" placeholder="Debtor Name" :class="{
                     'border-red-500': nameMessage,
@@ -30,9 +40,9 @@ const handleAddNewDebtor = () => {
                         {{ nameMessage }}
                     </p>
                 </transition>
-
             </div>
 
+            <!-- Amount -->
             <div class="flex flex-col gap-2">
                 <Input type="number" v-model="debtAmount" placeholder="Debt Amount" :class="{
                     'border-red-500': debtAmountMessage,
@@ -48,12 +58,7 @@ const handleAddNewDebtor = () => {
                 </transition>
             </div>
 
-
             <Button class="w-full">Create New Debtor</Button>
-
-            <p v-if="validateMessage" class="text-center text-sm text-red-500 bg-red-50 py-2 px-5 rounded">{{
-                validateMessage }}</p>
-
         </form>
     </div>
 </template>
