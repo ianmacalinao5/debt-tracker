@@ -51,9 +51,9 @@ const {
 <template>
     <div class="px-3 py-4 lg:px-5 lg:py-6 w-full max-w-7xl mx-auto">
         <!-- Header Section -->
-        <Header :handleAddDebtor="openAddDebtorModal" :handleLogout="handleLogout" />
+        <Header :handleAddDebtor="openAddDebtorModal" :handleLogout="handleLogout" @close="isDialogOpen = false" />
 
-        <Button @click="openAddDebtorModal" class="w-full sm:hidden mb-6 cursor-pointer">
+        <Button @click="openAddDebtorModal" @close="isDialogOpen = false" class="w-full sm:hidden mb-6 cursor-pointer">
             <Plus class="w-4 h-4 mr-2" />
             Add New Debtor
         </Button>

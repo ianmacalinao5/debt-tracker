@@ -14,6 +14,7 @@ export function useLoginValidation() {
     passwordMessage.value = "";
     validateMessage.value = "";
     let isValid = true;
+
     if (!email.value) {
       emailMessage.value = "Email is required.";
       isValid = false;
