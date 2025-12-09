@@ -35,7 +35,7 @@ const goToLogin = () => {
 </script>
 
 <template class="w-full">
-    <div class="w-full px-3 py-3 flex flex-col gap-5 mx-auto max-w-[400px] mt-10 lg:mt-20">
+    <div class="w-full px-5 py-3 flex flex-col gap-5 mx-auto max-w-[400px] mt-10 lg:mt-20">
 
         <!-- Logo -->
         <div class="flex gap-2 items-center justify-center mb-5">

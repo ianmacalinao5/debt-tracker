@@ -52,7 +52,7 @@ const {
 </script>
 
 <template>
-    <div class="px-3 py-4 lg:px-5 lg:py-6 w-full max-w-7xl mx-auto">
+    <div class="px-5 py-6 lg:px-5 lg:py-6 w-full max-w-7xl mx-auto">
         <!-- Header Section -->
         <Header :handleAddDebtor="openAddDebtorModal" :handleLogout="handleLogout" @close="isDialogOpen = false" />
 

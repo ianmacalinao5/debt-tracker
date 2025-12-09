@@ -13,7 +13,7 @@ const username = ref("Ian");
 </script>
 
 <template>
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-6 gap-5">
         <div class="flex flex-col">
             <div class="flex items-center gap-2">
                 <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">
