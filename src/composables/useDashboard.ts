@@ -51,6 +51,21 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
     console.log("Add new debtor");
   };
 
+  const handleUpdateDebtor = (data: {
+    id: number;
+    name: string;
+    debtAmount: number;
+  }) => {
+    debtors.value = debtors.value.map((d) =>
+      d.id === data.id ? { ...d, name: data.name, amount: data.debtAmount } : d
+    );
+  };
+
+  const handleDeleteDebtor = (id: number) => {
+    debtors.value = debtors.value.filter((d) => d.id !== id);
+    console.log("Deleted debtor id:", id);
+  };
+
   const handleLogout = () => {
     console.log("Logout");
   };
@@ -68,6 +83,8 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
     hasFilters,
 
     handleAddDebtor,
+    handleUpdateDebtor,
+    handleDeleteDebtor,
     handleLogout,
   };
 }

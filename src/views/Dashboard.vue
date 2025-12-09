@@ -31,6 +31,7 @@ const {
     modalTitle,
     modalDescription,
     modalComponent,
+    modalProps,
     openAddDebtorModal,
     openModal,
     closeModal,
@@ -43,6 +44,8 @@ const {
     emptyState,
     searchQuery,
     filter,
+    handleUpdateDebtor,
+    handleDeleteDebtor,
     handleLogout
 } = useDashboard(debtors);
 
@@ -97,7 +100,8 @@ const {
             </DialogHeader>
 
             <!-- Dynamic modal body -->
-            <component :is="modalComponent" :debtorId="selectedDebtorId" @close="closeModal" />
+            <component :is="modalComponent" :debtorId="selectedDebtorId" @close="closeModal"
+                @confirm="handleDeleteDebtor" @update="handleUpdateDebtor" v-bind="modalProps" />
         </DialogContent>
     </Dialog>
 

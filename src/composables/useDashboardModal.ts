@@ -12,6 +12,7 @@ export function useDashboardModal() {
   const isDialogOpen = ref(false);
   const currentAction = ref<string | null>(null);
   const selectedDebtorId = ref<number | null>(null);
+  const modalProps = ref<Record<string, any>>({});
 
   const modalTitle = computed(() => {
     switch (currentAction.value) {
@@ -73,16 +74,45 @@ export function useDashboardModal() {
   const openAddDebtorModal = () => {
     currentAction.value = "create";
     selectedDebtorId.value = null;
+    modalProps.value = {};
     isDialogOpen.value = true;
   };
 
-  const openModal = (payload: { action: ActionType; debtor: Debtor }) => {
-    const { action, debtor } = payload;
-    console.log("Selected action:", action);
-    console.log("Debtor:", debtor);
-
+  const openModal = ({
+    action,
+    debtor,
+  }: {
+    action: ActionType;
+    debtor: Debtor;
+  }) => {
     currentAction.value = action;
     selectedDebtorId.value = debtor.id;
+
+    switch (action) {
+      case "edit":
+        modalProps.value = {
+          debtorId: debtor.id,
+          debtorName: debtor.name,
+          debtorAmount: Number(debtor.current_balance.replace(/,/g, "")),
+        };
+        break;
+
+      case "add":
+      case "less":
+      case "view":
+        modalProps.value = {
+          debtorId: debtor.id,
+        };
+        break;
+
+      case "delete":
+        modalProps.value = {
+          debtorId: debtor.id,
+          debtorName: debtor.name,
+        };
+        break;
+    }
+
     isDialogOpen.value = true;
   };
 
@@ -90,6 +120,7 @@ export function useDashboardModal() {
     isDialogOpen.value = false;
     currentAction.value = null;
     selectedDebtorId.value = null;
+    modalProps.value = {};
   };
 
   return {
@@ -99,6 +130,7 @@ export function useDashboardModal() {
     modalTitle,
     modalDescription,
     modalComponent,
+    modalProps,
     openAddDebtorModal,
     openModal,
     closeModal,
