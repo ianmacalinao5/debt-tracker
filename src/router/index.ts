@@ -4,6 +4,7 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 import LoginView from "@/views/Login.vue";
+import RegisterView from "@/views/Register.vue";
 import DashboardView from "@/views/Dashboard.vue";
 import Notfound from "@/views/Notfound.vue";
 
@@ -14,6 +15,16 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView,
     meta: {
       title: "Debt Tracker",
+      requiresAuth: false,
+      guestOnly: true,
+    },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: RegisterView,
+    meta: {
+      title: "Register - Debt Tracker",
       requiresAuth: false,
       guestOnly: true,
     },
