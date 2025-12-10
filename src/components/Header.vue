@@ -31,7 +31,7 @@ const nameInitials = computed(() => {
 <template>
     <div class="flex items-center justify-between mb-6 gap-5">
         <div class="flex flex-col">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3 flex-wrap">
                 <h1 class="text-xl lg:text-2xl font-semibold text-gray-900">
                     Welcome back, {{ name }}
                 </h1>

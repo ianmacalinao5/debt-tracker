@@ -7,6 +7,7 @@ import ReduceAmountModal from "@/components/modals/ReduceAmountModal.vue";
 import EditDebtorModal from "@/components/modals/EditDebtorModal.vue";
 import DeleteDebtorModal from "@/components/modals/DeleteDebtorModal.vue";
 import ViewTransactionsModal from "@/components/modals/ViewTransactionsModal.vue";
+import ChangePasswordModal from "@/components/modals/ChangePasswordModal.vue";
 
 export function useDashboardModal() {
   const isDialogOpen = ref(false);
@@ -28,6 +29,8 @@ export function useDashboardModal() {
         return "Delete Debtor";
       case "view":
         return "Debtor Transactions";
+      case "change-password":
+        return "Change Password";
       default:
         return "";
     }
@@ -47,6 +50,8 @@ export function useDashboardModal() {
         return "This action cannot be undone.";
       case "view":
         return "View all transaction records for this debtor.";
+      case "change-password":
+        return "Change your personal account password.";
       default:
         return "";
     }
@@ -66,6 +71,8 @@ export function useDashboardModal() {
         return DeleteDebtorModal;
       case "view":
         return ViewTransactionsModal;
+      case "change-password":
+        return ChangePasswordModal;
       default:
         return null;
     }
@@ -77,7 +84,12 @@ export function useDashboardModal() {
     modalProps.value = {};
     isDialogOpen.value = true;
   };
-
+  const openChangePasswordModal = () => {
+    currentAction.value = "change-password";
+    selectedDebtorId.value = null;
+    modalProps.value = {};
+    isDialogOpen.value = true;
+  };
   const openModal = ({
     action,
     debtor,
@@ -132,6 +144,7 @@ export function useDashboardModal() {
     modalComponent,
     modalProps,
     openAddDebtorModal,
+    openChangePasswordModal,
     openModal,
     closeModal,
   };
