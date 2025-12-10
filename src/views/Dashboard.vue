@@ -5,8 +5,9 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import {
     Plus,
 } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useDashboard } from '@/composables/useDashboard';
+import { useAuthStore } from '@/stores/auth';
 import Header from '@/components/Header.vue';
 import MetricCard from '@/components/MetricCard.vue';
 import SearchFilter from '@/components/SearchFilter.vue';
@@ -22,8 +23,10 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 
+const auth = useAuthStore();
 const debtors = ref(debtorList);
 const loading = ref(false);
+const userLoading = ref(true);
 
 const {
     isDialogOpen,
@@ -50,13 +53,28 @@ const {
     handleLogout
 } = useDashboard(debtors);
 
+const userName = computed(() => auth.user?.name || 'User');
+
+onMounted(async () => {
+    try {
+        if (!auth.user) {
+            await auth.getUser();
+        }
+    } catch (error) {
+        console.error('Failed to fetch user:', error);
+    } finally {
+        userLoading.value = false;
+    }
+});
+
 </script>
 
 <template>
     <div class="px-5 py-6 lg:px-5 lg:py-6 w-full max-w-7xl mx-auto">
         <!-- Header Section -->
-        <Header :handleAddDebtor="openAddDebtorModal" :handleChangePassword="openChangePasswordModal"
-            :handleLogout="handleLogout" @close="isDialogOpen = false" />
+        <Header :userName="userName" :userLoading="userLoading" :handleAddDebtor="openAddDebtorModal"
+            :handleChangePassword="openChangePasswordModal" :handleLogout="handleLogout"
+            @close="isDialogOpen = false" />
 
         <Button @click="openAddDebtorModal" @close="isDialogOpen = false" class="w-full sm:hidden mb-6 cursor-pointer">
             <Plus class="w-4 h-4 mr-2" />

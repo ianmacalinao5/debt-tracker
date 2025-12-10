@@ -18,14 +18,9 @@ export function useLoginValidation() {
     if (!email.value) {
       emailMessage.value = "Email is required.";
       isValid = false;
-    } else if (email.value.length < 3) {
-      emailMessage.value = "Email should be at least 3 characters long.";
-      isValid = false;
     } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
-      emailMessage.value = "Please enter a valid email address.";
+      emailMessage.value = "Please enter a valid email.";
       isValid = false;
-    } else {
-      emailMessage.value = "";
     }
 
     if (!password.value) {
@@ -34,15 +29,6 @@ export function useLoginValidation() {
     } else if (password.value.length < 8) {
       passwordMessage.value = "Password should be at least 8 characters long.";
       isValid = false;
-    }
-
-    if (!emailMessage.value && !passwordMessage.value) {
-      if (email.value === "test@gmail.com" && password.value === "password") {
-        isValid = true;
-      } else {
-        validateMessage.value = "Invalid email or password.";
-        isValid = false;
-      }
     }
 
     return isValid;

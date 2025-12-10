@@ -17,6 +17,8 @@
     "clsx": "^2.1.1",
     "html-to-image": "^1.11.13",
     "lucide-vue-next": "^0.555.0",
+    "pina": "^0.20.2204228",
+    "pinia": "^3.0.4",
     "reka-ui": "^2.6.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",

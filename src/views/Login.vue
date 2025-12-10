@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import Button from '@/components/ui/button/Button.vue';
 import Input from '@/components/ui/input/Input.vue';
 import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
-import { CircleDollarSign } from 'lucide-vue-next';
+import { CircleDollarSign, Eye, EyeOff, Loader2 } from 'lucide-vue-next';
 import { useLoginValidation } from '@/composables/useLoginValidation';
 import { toast } from 'vue-sonner';
+
+const auth = useAuthStore();
+const router = useRouter();
+const showPassword = ref(false);
+const isLoading = ref(false);
 
 const {
     email,
@@ -17,19 +24,23 @@ const {
     validate
 } = useLoginValidation();
 
-const router = useRouter();
-
-const handleLogin = () => {
+const handleLogin = async () => {
     const isValid = validate();
-
-    if (isValid) {
-        toast.success("Login successful!");
-        router.push("/dashboard");
+    if (!isValid) {
+        if (validateMessage.value) toast.error(validateMessage.value);
         return;
     }
 
-    if (validateMessage.value) {
-        toast.error(validateMessage.value);
+    isLoading.value = true;
+
+    try {
+        await auth.login(email.value, password.value, remember.value);
+        toast.success("Login successful!");
+        router.push("/dashboard");
+    } catch (err: any) {
+        toast.error(err.response?.data?.message || "Invalid credentials");
+    } finally {
+        isLoading.value = false;
     }
 };
 
@@ -49,10 +60,16 @@ const goToRegister = () => {
 
         <!-- Email -->
         <div class="flex flex-col gap-2">
-            <Input type="email" placeholder="Email" v-model="email" :class="{
-                'border-red-500': emailMessage,
-                'focus-visible:ring-red-200': emailMessage
-            }" />
+            <Input 
+                type="email" 
+                placeholder="Email" 
+                v-model="email" 
+                :disabled="isLoading"
+                :class="{
+                    'border-red-500': emailMessage,
+                    'focus-visible:ring-red-200': emailMessage
+                }" 
+            />
 
             <transition enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
                 enter-active-class="transition-all duration-150" leave-from-class="opacity-100 translate-y-0"
@@ -65,10 +82,29 @@ const goToRegister = () => {
 
         <!-- Password -->
         <div class="flex flex-col gap-2">
-            <Input type="password" placeholder="Password" v-model="password" :class="{
-                'border-red-500': passwordMessage,
-                'focus-visible:ring-red-200': passwordMessage
-            }" />
+            <div class="relative">
+                <Input 
+                    :type="showPassword ? 'text' : 'password'" 
+                    placeholder="Password" 
+                    v-model="password"
+                    :disabled="isLoading"
+                    class="pr-10" 
+                    :class="{
+                        'border-red-500': passwordMessage,
+                        'focus-visible:ring-red-200': passwordMessage
+                    }" 
+                />
+
+                <button 
+                    type="button" 
+                    @click="showPassword = !showPassword"
+                    :disabled="isLoading"
+                    class="absolute right-0 top-0 h-full px-3 text-gray-500 hover:text-gray-700 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <EyeOff v-if="showPassword" class="w-5 h-5" />
+                    <Eye v-else class="w-5 h-5" />
+                </button>
+            </div>
 
             <transition enter-from-class="opacity-0 -translate-y-1" enter-to-class="opacity-100 translate-y-0"
                 enter-active-class="transition-all duration-150" leave-from-class="opacity-100 translate-y-0"
@@ -81,15 +117,22 @@ const goToRegister = () => {
 
         <!-- Remember Me -->
         <div class="flex text-sm items-center gap-2">
-            <Checkbox v-model="remember" id="remember" />
-            <label for="remember">Remember Me</label>
+            <Checkbox v-model="remember" id="remember" :disabled="isLoading" />
+            <label for="remember" :class="{ 'opacity-50': isLoading }">Remember Me</label>
         </div>
 
         <!-- Login Button -->
-        <Button @click="handleLogin">Login</Button>
+        <Button @click="handleLogin" :disabled="isLoading" class="relative">
+            <Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+            {{ isLoading ? 'Logging in...' : 'Login' }}
+        </Button>
 
         <div class="text-center text-sm mt-2">
-            <button class="underline text-gray-600 hover:text-gray-800 cursor-pointer" @click="goToRegister">
+            <button 
+                class="underline text-gray-600 hover:text-gray-800 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed" 
+                @click="goToRegister"
+                :disabled="isLoading"
+            >
                 Dont have an account? Register
             </button>
         </div>

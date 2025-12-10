@@ -1,7 +1,13 @@
 import { ref, computed, type Ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import { toast } from "vue-sonner";
 import type { Debtor } from "@/types";
 
 export function useDashboard(debtors: Ref<Debtor[]>) {
+  const router = useRouter();
+  const auth = useAuthStore();
+
   const searchQuery = ref("");
   const filter = ref("all");
 
@@ -66,8 +72,15 @@ export function useDashboard(debtors: Ref<Debtor[]>) {
     console.log("Deleted debtor id:", id);
   };
 
-  const handleLogout = () => {
-    console.log("Logout");
+  const handleLogout = async () => {
+    try {
+      await auth.logout();
+      toast.success("Logged out successfully!");
+      router.push("/");
+    } catch (err: any) {
+      toast.error("Failed to logout");
+      console.error("Logout error:", err);
+    }
   };
 
   return {

@@ -35,7 +35,7 @@ const routes: Array<RouteRecordRaw> = [
     component: DashboardView,
     meta: {
       title: "Dashboard - Debt Tracker",
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   { path: "/:catchAll(.*)", name: "NotFound", component: Notfound },
@@ -48,23 +48,17 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const pageTitle = to.meta.title;
-  if (pageTitle) {
-    document.title = pageTitle as string;
-  } else {
-    document.title = "Debt Tracker";
-  }
+  document.title = pageTitle ? (pageTitle as string) : "Debt Tracker";
 
-  const token = localStorage.getItem("sanctumApiToken");
+  const token = localStorage.getItem("authToken");
   const requiresAuth = to.meta.requiresAuth;
 
   if (requiresAuth && !token) {
-    next("/");
-    return;
+    return next("/");
   }
 
   if (to.meta.guestOnly && token) {
-    next("/dashboard");
-    return;
+    return next("/dashboard");
   }
 
   next();
