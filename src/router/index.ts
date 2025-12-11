@@ -46,11 +46,13 @@ export const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const pageTitle = to.meta.title;
   document.title = pageTitle ? (pageTitle as string) : "Debt Tracker";
 
-  const token = localStorage.getItem("authToken");
+  // Check both localStorage and sessionStorage for token
+  const token =
+    localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
   const requiresAuth = to.meta.requiresAuth;
 
   if (requiresAuth && !token) {

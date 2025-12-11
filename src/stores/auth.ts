@@ -1,5 +1,10 @@
 import { defineStore } from "pinia";
-import { loginRequest, fetchUser, logoutRequest } from "@/api/auth";
+import {
+  loginRequest,
+  registerRequest,
+  fetchUser,
+  logoutRequest,
+} from "@/api/auth";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -24,6 +29,26 @@ export const useAuthStore = defineStore("auth", {
         sessionStorage.setItem("authToken", res.data.token);
         localStorage.removeItem("authToken");
       }
+    },
+
+    async register(
+      name: string,
+      email: string,
+      password: string,
+      passwordConfirmation: string
+    ) {
+      const res = await registerRequest({
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      });
+
+      this.token = res.data.token;
+      this.user = res.data.user;
+
+      sessionStorage.setItem("authToken", res.data.token);
+      localStorage.removeItem("authToken");
     },
 
     async getUser() {

@@ -12,6 +12,7 @@ export const registerRequest = (payload: {
   name: string;
   email: string;
   password: string;
+  password_confirmation: string;
 }) => {
   return api.post("/register", payload);
 };
