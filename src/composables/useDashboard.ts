@@ -5,99 +5,106 @@ import { toast } from "vue-sonner";
 import type { Debtor } from "@/types";
 
 export function useDashboard(debtors: Ref<Debtor[]>) {
-  const router = useRouter();
-  const auth = useAuthStore();
+    const router = useRouter();
+    const auth = useAuthStore();
 
-  const searchQuery = ref("");
-  const filter = ref("all");
+    const searchQuery = ref("");
+    const filter = ref("all");
 
-  const totalOutstanding = computed(() => {
-    return debtors.value
-      .reduce((sum, debtor) => {
-        return sum + parseFloat(debtor.current_balance.replace(/,/g, ""));
-      }, 0)
-      .toLocaleString();
-  });
+    const totalOutstanding = computed(() => {
+        const total = debtors.value.reduce((sum, debtor) => {
+            return sum + Number(debtor.current_balance);
+        }, 0);
 
-  const totalDebtors = computed(() => debtors.value.length);
-
-  const filteredDebtors = computed(() => {
-    return debtors.value.filter((debtor) => {
-      const matchesSearch =
-        !searchQuery.value ||
-        debtor.name.toLowerCase().includes(searchQuery.value.toLowerCase());
-
-      const matchesFilter =
-        filter.value === "all" || debtor.status === filter.value;
-
-      return matchesSearch && matchesFilter;
+        return total.toLocaleString("en-PH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
     });
-  });
 
-  const hasDebtors = computed(() => debtors.value.length > 0);
-  const isSearching = computed(() => searchQuery.value.length > 0);
-  const hasFilters = computed(() => filter.value !== "all");
+    const totalDebtors = computed(() => debtors.value.length);
 
-  const emptyState = computed(() => {
-    if (!hasDebtors.value) return "empty";
+    const filteredDebtors = computed(() => {
+        return debtors.value.filter((debtor) => {
+            const matchesSearch =
+                !searchQuery.value ||
+                debtor.name
+                    .toLowerCase()
+                    .includes(searchQuery.value.toLowerCase());
 
-    if (isSearching.value && filteredDebtors.value.length === 0) {
-      return "search";
-    }
+            const matchesFilter =
+                filter.value === "all" || debtor.status === filter.value;
 
-    if (hasFilters.value && filteredDebtors.value.length === 0) {
-      return "filter";
-    }
+            return matchesSearch && matchesFilter;
+        });
+    });
 
-    return "empty";
-  });
+    const hasDebtors = computed(() => debtors.value.length > 0);
+    const isSearching = computed(() => searchQuery.value.length > 0);
+    const hasFilters = computed(() => filter.value !== "all");
 
-  // Handlers
-  const handleAddDebtor = () => {
-    console.log("Add new debtor");
-  };
+    const emptyState = computed(() => {
+        if (!hasDebtors.value) return "empty";
 
-  const handleUpdateDebtor = (data: {
-    id: number;
-    name: string;
-    debtAmount: number;
-  }) => {
-    debtors.value = debtors.value.map((d) =>
-      d.id === data.id ? { ...d, name: data.name, amount: data.debtAmount } : d
-    );
-  };
+        if (isSearching.value && filteredDebtors.value.length === 0) {
+            return "search";
+        }
 
-  const handleDeleteDebtor = (id: number) => {
-    debtors.value = debtors.value.filter((d) => d.id !== id);
-    console.log("Deleted debtor id:", id);
-  };
+        if (hasFilters.value && filteredDebtors.value.length === 0) {
+            return "filter";
+        }
 
-  const handleLogout = async () => {
-    try {
-      await auth.logout();
-      toast.success("Logged out successfully!");
-      router.push("/");
-    } catch (err: any) {
-      toast.error("Failed to logout");
-      console.error("Logout error:", err);
-    }
-  };
+        return "empty";
+    });
 
-  return {
-    searchQuery,
-    filter,
-    totalOutstanding,
-    totalDebtors,
-    filteredDebtors,
+    // Handlers
+    const handleAddDebtor = () => {
+        console.log("Add new debtor");
+    };
 
-    emptyState,
-    hasDebtors,
-    isSearching,
-    hasFilters,
+    const handleUpdateDebtor = (data: {
+        id: number;
+        name: string;
+        debtAmount: number;
+    }) => {
+        debtors.value = debtors.value.map((d) =>
+            d.id === data.id
+                ? { ...d, name: data.name, amount: data.debtAmount }
+                : d
+        );
+    };
 
-    handleAddDebtor,
-    handleUpdateDebtor,
-    handleDeleteDebtor,
-    handleLogout,
-  };
+    const handleDeleteDebtor = (id: number) => {
+        debtors.value = debtors.value.filter((d) => d.id !== id);
+        console.log("Deleted debtor id:", id);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await auth.logout();
+            toast.success("Logged out successfully!");
+            router.push("/");
+        } catch (err: any) {
+            toast.error("Failed to logout");
+            console.error("Logout error:", err);
+        }
+    };
+
+    return {
+        searchQuery,
+        filter,
+        totalOutstanding,
+        totalDebtors,
+        filteredDebtors,
+
+        emptyState,
+        hasDebtors,
+        isSearching,
+        hasFilters,
+
+        handleAddDebtor,
+        handleUpdateDebtor,
+        handleDeleteDebtor,
+        handleLogout,
+    };
 }
