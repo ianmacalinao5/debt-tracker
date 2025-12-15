@@ -14,7 +14,6 @@ export const useDebtorStore = defineStore("debtors", {
         debtors: [] as Debtor[],
         loading: true,
 
-        // UI state
         searchQuery: "",
         filter: "all" as "all" | "outstanding" | "cleared",
     }),
