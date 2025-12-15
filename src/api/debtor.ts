@@ -1,5 +1,5 @@
 import api from "./axios";
-import type { Debtor } from "@/types";
+import type { Debtor, Transaction } from "@/types";
 
 export const fetchDebtors = (
     status: "all" | "outstanding" | "cleared" = "all"
@@ -46,4 +46,8 @@ export const payDebtorAmountRequest = (
 
 export const deleteDebtorRequest = (debtorId: number) => {
     return api.delete(`/debtors/${debtorId}`);
+};
+
+export const fetchDebtorTransactionsRequest = (debtorId: number) => {
+    return api.get<Transaction[]>(`/debtors/${debtorId}/transactions`);
 };

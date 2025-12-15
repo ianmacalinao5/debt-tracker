@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import type { Debtor } from "@/types";
+import type { Debtor, Transaction } from "@/types";
 import {
     fetchDebtors,
+    fetchDebtorTransactionsRequest,
     createDebtorRequest,
     updateDebtorRequest,
     addDebtorAmountRequest,
@@ -12,7 +13,9 @@ import {
 export const useDebtorStore = defineStore("debtors", {
     state: () => ({
         debtors: [] as Debtor[],
+        transactions: [] as Transaction[],
         loading: true,
+        transactionsLoading: false,
 
         searchQuery: "",
         filter: "all" as "all" | "outstanding" | "cleared",
@@ -72,6 +75,17 @@ export const useDebtorStore = defineStore("debtors", {
             }
         },
 
+        async loadTransactions(debtorId: number) {
+            this.clearTransactions();
+            this.transactionsLoading = true;
+            try {
+                const res = await fetchDebtorTransactionsRequest(debtorId);
+                this.transactions = res.data;
+            } finally {
+                this.transactionsLoading = false;
+            }
+        },
+
         async createDebtor(payload: { name: string; current_balance: number }) {
             const res = await createDebtorRequest(payload);
             this.debtors.unshift(res.data);
@@ -96,6 +110,7 @@ export const useDebtorStore = defineStore("debtors", {
             this.debtors = this.debtors.map((d) =>
                 d.id === debtorId ? res.data : d
             );
+            await this.loadTransactions(debtorId);
         },
 
         async payAmount(debtorId: number, amount: number) {
@@ -103,11 +118,16 @@ export const useDebtorStore = defineStore("debtors", {
             this.debtors = this.debtors.map((d) =>
                 d.id === debtorId ? res.data : d
             );
+            await this.loadTransactions(debtorId);
         },
 
         async deleteDebtor(debtorId: number) {
             await deleteDebtorRequest(debtorId);
             this.debtors = this.debtors.filter((d) => d.id !== debtorId);
+        },
+
+        clearTransactions() {
+            this.transactions = [];
         },
     },
 });

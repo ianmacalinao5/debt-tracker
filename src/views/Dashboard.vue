@@ -51,6 +51,13 @@ const {
 
 const userName = computed(() => auth.user?.name || "User");
 
+const selectedDebtorName = computed(() => {
+    return (
+        debtorStore.debtors.find((d) => d.id === selectedDebtorId.value)
+            ?.name || ""
+    );
+});
+
 const handleLogout = async () => {
     await auth.logout();
 };
@@ -136,6 +143,7 @@ onMounted(async () => {
             <component
                 :is="modalComponent"
                 :debtorId="selectedDebtorId"
+                :debtorName="selectedDebtorName"
                 v-bind="modalProps"
                 @close="closeModal"
                 @confirm="debtorStore.deleteDebtor"
