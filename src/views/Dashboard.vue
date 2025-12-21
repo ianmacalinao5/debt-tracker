@@ -147,7 +147,13 @@ onMounted(async () => {
                 v-bind="modalProps"
                 @close="closeModal"
                 @confirm="debtorStore.deleteDebtor"
-                @update="debtorStore.updateDebtor"
+                @update="
+                    (data: { id: number; name: string; current_balance: number; }) =>
+                        debtorStore.updateDebtor(data.id, {
+                            name: data.name,
+                            current_balance: data.current_balance,
+                        })
+                "
             />
         </DialogContent>
     </Dialog>

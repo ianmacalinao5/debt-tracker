@@ -24,7 +24,7 @@ export const updateDebtorRequest = (
     debtorId: number,
     payload: {
         name: string;
-        status: "outstanding" | "cleared";
+        current_balance: number;
     }
 ) => {
     return api.put<Debtor>(`/debtors/${debtorId}`, payload);

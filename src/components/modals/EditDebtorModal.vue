@@ -13,13 +13,15 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "close"): void;
-    (e: "update", data: { id: number; name: string; debtAmount: number }): void;
+    (
+        e: "update",
+        data: { id: number; name: string; current_balance: number }
+    ): void;
 }>();
 
 const { name, debtAmount, nameMessage, debtAmountMessage, validate } =
     useEditDebtorValidation();
 
-// 👇 FIX: reactively sync props to inputs
 watch(
     () => props.debtorId,
     () => {
@@ -34,7 +36,7 @@ const handleEditDebtor = () => {
         emit("update", {
             id: props.debtorId,
             name: name.value,
-            debtAmount: debtAmount.value,
+            current_balance: debtAmount.value,
         });
 
         emit("close");

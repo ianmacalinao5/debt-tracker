@@ -96,7 +96,7 @@ export const useDebtorStore = defineStore("debtors", {
             debtorId: number,
             payload: {
                 name: string;
-                status: "outstanding" | "cleared";
+                current_balance: number;
             }
         ) {
             const res = await updateDebtorRequest(debtorId, payload);
