@@ -25,9 +25,8 @@ const handleAddNewDebtor = async () => {
             name: name.value,
             current_balance: Number(debtAmount.value),
         });
-
-        toast.success("Debtor added successfully!");
         emit("close");
+        toast.success("Debtor added successfully!");
     } catch (error: any) {
         toast.error(error?.response?.data?.message || "Failed to add debtor");
     } finally {

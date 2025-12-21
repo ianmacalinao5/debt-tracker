@@ -30,8 +30,8 @@ const handleLessAmount = async () => {
 
         await debtorStore.payAmount(props.debtorId, Number(amountLess.value));
 
-        toast.success("Amount reduced successfully!");
         emit("close");
+        toast.success("Amount reduced successfully!");
     } catch (error: any) {
         toast.error(
             error?.response?.data?.message || "Failed to reduce amount"

@@ -27,11 +27,9 @@ const handleAddAmount = async () => {
 
     try {
         isSubmitting.value = true;
-
         await debtorStore.addAmount(props.debtorId, Number(amountAdd.value));
-
-        toast.success("Amount added successfully!");
         emit("close");
+        toast.success("Amount added successfully!");
     } catch (error: any) {
         toast.error(error?.response?.data?.message || "Failed to add amount");
     } finally {
