@@ -1,26 +1,34 @@
 import api from "./axios";
 
 export const loginRequest = (payload: {
-  email: string;
-  password: string;
-  remember: boolean;
+    email: string;
+    password: string;
+    remember: boolean;
 }) => {
-  return api.post("/login", payload);
+    return api.post("/login", payload);
 };
 
 export const registerRequest = (payload: {
-  name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
 }) => {
-  return api.post("/register", payload);
+    return api.post("/register", payload);
+};
+
+export const changePasswordRequest = (payload: {
+    current_password: string;
+    new_password: string;
+    new_password_confirmation: string;
+}) => {
+    return api.post("/change-password", payload);
 };
 
 export const logoutRequest = () => {
-  return api.post("/logout");
+    return api.post("/logout");
 };
 
 export const fetchUser = () => {
-  return api.get("/user");
+    return api.get("/user");
 };

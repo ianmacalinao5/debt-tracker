@@ -5,6 +5,8 @@ import Skeleton from "@/components/ui/skeleton/Skeleton.vue";
 import { Plus } from "lucide-vue-next";
 import { onMounted, computed } from "vue";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { toast } from "vue-sonner";
 
 import Header from "@/components/Header.vue";
 import MetricCard from "@/components/MetricCard.vue";
@@ -50,6 +52,7 @@ const {
 } = useDashboardModal();
 
 const userName = computed(() => auth.user?.name || "User");
+const router = useRouter();
 
 const selectedDebtorName = computed(() => {
     return (
@@ -60,6 +63,8 @@ const selectedDebtorName = computed(() => {
 
 const handleLogout = async () => {
     await auth.logout();
+    router.push("/");
+    toast.success("Logged out successfully!");
 };
 
 onMounted(async () => {
