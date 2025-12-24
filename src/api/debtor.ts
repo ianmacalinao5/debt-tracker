@@ -1,11 +1,14 @@
 import api from "./axios";
-import type { Debtor, Transaction } from "@/types";
+import type {
+    Debtor,
+    Transaction,
+    FetchDebtorParams,
+    DebtorResponse,
+} from "@/types";
 
-export const fetchDebtors = (
-    status: "all" | "outstanding" | "cleared" = "all"
-) => {
-    return api.get<Debtor[]>("/debtors", {
-        params: { status },
+export const fetchDebtors = (params: FetchDebtorParams) => {
+    return api.get<DebtorResponse>("/debtors", {
+        params: params,
     });
 };
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DebtCard from "@/components/DebtCard.vue";
+import { watch } from "vue";
 import { Button } from "@/components/ui/button";
 import Skeleton from "@/components/ui/skeleton/Skeleton.vue";
 import { Plus } from "lucide-vue-next";
@@ -8,12 +8,14 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { toast } from "vue-sonner";
 
+import DebtCard from "@/components/DebtCard.vue";
 import Header from "@/components/Header.vue";
 import MetricCard from "@/components/MetricCard.vue";
 import SearchFilter from "@/components/SearchFilter.vue";
 import NoDebtorsFound from "@/components/NoDebtorsFound.vue";
-
+import Pagination from "@/components/Pagination.vue";
 import { useDashboardModal } from "@/composables/useDashboardModal";
+
 import {
     Dialog,
     DialogContent,
@@ -28,15 +30,8 @@ import { useDebtorStore } from "@/stores/debtors";
 const auth = useAuthStore();
 const debtorStore = useDebtorStore();
 
-const {
-    loading,
-    filteredDebtors,
-    totalOutstanding,
-    totalDebtors,
-    emptyState,
-    searchQuery,
-    filter,
-} = storeToRefs(debtorStore);
+const { loading, debtors, emptyState, searchQuery, filter } =
+    storeToRefs(debtorStore);
 
 const {
     isDialogOpen,
@@ -53,6 +48,14 @@ const {
 
 const userName = computed(() => auth.user?.name || "User");
 const router = useRouter();
+
+watch(searchQuery, () => {
+    debtorStore.setSearchQuery(searchQuery.value);
+});
+
+watch(filter, () => {
+    debtorStore.setFilter(filter.value);
+});
 
 const selectedDebtorName = computed(() => {
     return (
@@ -96,16 +99,16 @@ onMounted(async () => {
 
         <!-- Metrics -->
         <MetricCard
-            :totalOutstanding="totalOutstanding"
-            :totalDebtors="totalDebtors"
-            :loading="debtorStore.loading"
+            :totalOutstanding="debtorStore.globalStats.totalOutstanding"
+            :totalDebtors="debtorStore.globalStats.totalCount"
+            :loading="debtorStore.isInitialLoading"
         />
 
         <!-- Search / Filter -->
         <SearchFilter
             v-model:searchQuery="searchQuery"
             v-model:filter="filter"
-            class="mt-10"
+            class="mt-10 mb-5"
         />
 
         <!-- Loading -->
@@ -117,17 +120,23 @@ onMounted(async () => {
         </div>
 
         <!-- Cards -->
-        <div
-            v-else-if="filteredDebtors.length"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
-        >
-            <DebtCard
-                v-for="debtor in filteredDebtors"
-                :key="debtor.id"
-                v-bind="debtor"
-                @action="openModal"
+        <template v-else-if="debtors.length">
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
+            >
+                <DebtCard
+                    v-for="debtor in debtors"
+                    :key="debtor.id"
+                    v-bind="debtor"
+                    @action="openModal"
+                />
+            </div>
+
+            <Pagination
+                :meta="debtorStore.paginationMeta"
+                @change="(page: number) => debtorStore.loadDebtors({ page })"
             />
-        </div>
+        </template>
 
         <!-- Empty -->
         <div v-else>

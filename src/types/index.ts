@@ -19,3 +19,20 @@ export interface Transaction {
     balance_after: number;
     created_at: string;
 }
+
+export interface FetchDebtorParams {
+    page?: number;
+    per_page?: number;
+    filter?: "all" | "outstanding" | "cleared";
+    search?: string;
+}
+
+export interface DebtorResponse {
+    data: Debtor[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        per_page: number;
+        total: number;
+    };
+}
