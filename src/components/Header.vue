@@ -38,7 +38,7 @@ const nameInitials = computed(() => {
                     Welcome back, {{ userName }}
                 </h1>
 
-                <Smile class="text-yellow-500 w-8 h-8" />
+                <!-- <Smile class="text-yellow-500 w-8 h-8" /> -->
             </div>
 
             <p class="text-sm text-gray-600 mt-1">

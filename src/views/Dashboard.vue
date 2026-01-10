@@ -160,7 +160,7 @@ onMounted(async () => {
                 :debtorName="selectedDebtorName"
                 v-bind="modalProps"
                 @close="closeModal"
-                @confirm="debtorStore.deleteDebtor"
+                @delete="debtorStore.deleteDebtor"
                 @update="
                     (data: { id: number; name: string; current_balance: number; }) =>
                         debtorStore.updateDebtor(data.id, {

@@ -8,11 +8,11 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "close"): void;
-    (e: "confirm", id: number): void;
+    (e: "delete", id: number): void;
 }>();
 
 const handleDeleteDebtor = () => {
-    emit("confirm", props.debtorId);
+    emit("delete", props.debtorId);
     emit("close");
     toast.success("Debtor deleted successfully!");
 };
