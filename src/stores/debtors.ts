@@ -116,8 +116,7 @@ export const useDebtorStore = defineStore("debtors", {
             if (this.searchTimeout) clearTimeout(this.searchTimeout);
             this.searchTimeout = setTimeout(() => {
                 this.loadDebtors();
-                this.searchTimeout = null;
-            }, 500);
+            }, 400);
         },
 
         setFilter(filter: "all" | "outstanding" | "cleared") {

@@ -49,11 +49,6 @@ const {
 const userName = computed(() => auth.user?.name || "User");
 const router = useRouter();
 
-// Check if search is pending
-const isWaitingForSearch = computed(() => {
-    return debtorStore.searchTimeout !== null;
-});
-
 watch(searchQuery, () => {
     debtorStore.setSearchQuery(searchQuery.value);
 });
@@ -124,8 +119,8 @@ onMounted(async () => {
             <Skeleton v-for="i in 6" :key="i" class="w-full h-[150px]" />
         </div>
 
-        <!-- Cards or Searching -->
-        <template v-else-if="debtors.length || isWaitingForSearch">
+        <!-- Cards -->
+        <template v-else-if="debtors.length">
             <div
                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
             >
@@ -138,7 +133,6 @@ onMounted(async () => {
             </div>
 
             <Pagination
-                v-if="debtors.length"
                 :meta="debtorStore.paginationMeta"
                 @change="(page: number) => debtorStore.loadDebtors({ page })"
             />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import Button from "./ui/button/Button.vue";
-import { Plus, LogOut, KeyRound } from "lucide-vue-next";
+import { Plus, LogOut, Smile, KeyRound } from "lucide-vue-next";
 
 import {
     DropdownMenu,
