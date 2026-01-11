@@ -18,17 +18,26 @@ export const useAuthStore = defineStore("auth", {
 
     actions: {
         async login(email: string, password: string, remember: boolean) {
-            const res = await loginRequest({ email, password, remember });
+            try {
+                const res = await loginRequest({ email, password, remember });
 
-            this.token = res.data.token;
-            this.user = res.data.user;
+                this.token = res.data.token;
+                this.user = res.data.user;
 
-            if (remember) {
-                localStorage.setItem("authToken", res.data.token);
-                sessionStorage.removeItem("authToken");
-            } else {
-                sessionStorage.setItem("authToken", res.data.token);
+                if (remember) {
+                    localStorage.setItem("authToken", res.data.token);
+                    sessionStorage.removeItem("authToken");
+                } else {
+                    sessionStorage.setItem("authToken", res.data.token);
+                    localStorage.removeItem("authToken");
+                }
+            } catch (error) {
+                this.token = null;
+                this.user = null;
                 localStorage.removeItem("authToken");
+                sessionStorage.removeItem("authToken");
+
+                throw error;
             }
         },
 
