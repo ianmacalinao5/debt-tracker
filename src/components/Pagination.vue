@@ -74,7 +74,6 @@ const visiblePages = computed(() => {
 <template>
     <Pagination
         v-if="meta && meta.last_page > 1"
-        v-slot="{ page }"
         :total="meta.last_page * 10"
         :items-per-page="10"
         :sibling-count="1"
