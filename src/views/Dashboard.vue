@@ -3,7 +3,7 @@ import { watch } from "vue";
 import { Button } from "@/components/ui/button";
 import Skeleton from "@/components/ui/skeleton/Skeleton.vue";
 import { Plus } from "lucide-vue-next";
-import { onMounted, computed } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { toast } from "vue-sonner";
@@ -48,6 +48,7 @@ const {
 
 const userName = computed(() => auth.user?.name || "User");
 const router = useRouter();
+const headerLoading = ref(true);
 
 watch(searchQuery, () => {
     debtorStore.setSearchQuery(searchQuery.value);
@@ -71,8 +72,12 @@ const handleLogout = async () => {
 };
 
 onMounted(async () => {
-    if (!auth.user) {
-        await auth.getUser();
+    try {
+        if (!auth.user) {
+            await auth.getUser();
+        }
+    } finally {
+        headerLoading.value = false;
     }
 
     await debtorStore.loadDebtors();
@@ -84,6 +89,7 @@ onMounted(async () => {
         <!-- Header -->
         <Header
             :userName="userName"
+            :isLoading="headerLoading"
             :handleAddDebtor="openAddDebtorModal"
             :handleChangePassword="openChangePasswordModal"
             :handleLogout="handleLogout"
@@ -162,7 +168,11 @@ onMounted(async () => {
                 @close="closeModal"
                 @delete="debtorStore.deleteDebtor"
                 @update="
-                    (data: { id: number; name: string; current_balance: number; }) =>
+                    (data: {
+                        id: number;
+                        name: string;
+                        current_balance: number;
+                    }) =>
                         debtorStore.updateDebtor(data.id, {
                             name: data.name,
                             current_balance: data.current_balance,
